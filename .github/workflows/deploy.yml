@@ -11,42 +11,42 @@ jobs:
 
     steps:
 
-    # Checkout repository
+    # 1. Checkout code
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Login to Docker Hub
+    # 2. Login to DockerHub
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # Build backend image
+    # 3. Build Backend Image
     - name: Build Backend Image
       run: |
         docker buildx build --load \
           -t ${{ secrets.DOCKERHUB_USERNAME }}/todo-backend:latest \
           ./app/backend
 
-    # Push backend image
+    # 4. Push Backend Image
     - name: Push Backend Image
       run: |
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/todo-backend:latest
 
-    # Build frontend image
+    # 5. Build Frontend Image
     - name: Build Frontend Image
       run: |
         docker buildx build --load \
           -t ${{ secrets.DOCKERHUB_USERNAME }}/todo-frontend:latest \
           ./app/frontend
 
-    # Push frontend image
+    # 6. Push Frontend Image
     - name: Push Frontend Image
       run: |
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/todo-frontend:latest
 
-    # Deploy to EC2
+    # 7. Deploy on EC2 Server
     - name: Deploy to EC2 Instance
       uses: appleboy/ssh-action@v0.1.5
       with:
@@ -54,13 +54,8 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         script: |
-          # Pull newest images
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todo-backend:latest
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todo-frontend:latest
-
-          # Go to project folder
           cd ~/devops-capstone-todo-app
-
-          # Restart stack
           sudo docker compose down
           sudo docker compose up -d --build
