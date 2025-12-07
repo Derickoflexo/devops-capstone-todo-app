@@ -1,0 +1,21 @@
+# === Secrets & Keys ===
+*.pem
+*.key
+.env
+
+# Firebase / Google service accounts (DO NOT COMMIT)
+firebase-adminsdk*.json
+*-adminsdk-*.json
+
+# Node / Angular
+node_modules/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
