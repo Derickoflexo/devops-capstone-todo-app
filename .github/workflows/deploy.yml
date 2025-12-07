@@ -19,7 +19,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # ================= BACKEND =================
       - name: Build Backend Image
         run: |
           docker build \
@@ -30,7 +29,6 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/todo-backend:latest
 
-      # ================= FRONTEND =================
       - name: Build Frontend Image
         run: |
           docker build \
@@ -41,7 +39,6 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/todo-frontend:latest
 
-      # ================= DEPLOY =================
       - name: Deploy to EC2 Instance
         uses: appleboy/ssh-action@v0.1.5
         with:
